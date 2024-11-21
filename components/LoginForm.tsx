@@ -1,5 +1,4 @@
-"use client";
-import { UserCredentials, userLogin } from "@/app/actions/auth";
+"use client";``
 import { signIn } from "next-auth/react";
 import { FormEvent, useState } from "react";
 
