@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { UserCredentials, userLogin } from "./app/actions/auth";
+import { redirect } from "next/navigation";
 
 export const {
   handlers: { GET, POST },
@@ -27,7 +28,11 @@ export const {
         if (!user.success) {
           return null;
         }
-        return user.data;
+        return {
+          name: user.data.firstName + " " + user.data.lastName,
+          email: user.data.emailId,
+          id: user.data.token,
+        };
       },
     }),
   ],

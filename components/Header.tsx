@@ -1,5 +1,7 @@
 import { auth } from "@/auth";
+import { toSentenceCase } from "@/utils";
 import Link from "next/link";
+import LogoutButton from "./logout";
 
 export default async function Header() {
   const session = await auth();
@@ -13,10 +15,11 @@ export default async function Header() {
         {!session ? (
           <Link href="/signin">Sign In</Link>
         ) : (
-          <p>{session.user?.name}</p>
+          <p>{toSentenceCase(session.user?.name || "")}</p>
         )}
         {!session && <Link href="/signup">Sign Up</Link>}
         <Link href="/protected-route">Protected Route</Link>
+        {session && <LogoutButton />}
       </div>
     </nav>
   );
