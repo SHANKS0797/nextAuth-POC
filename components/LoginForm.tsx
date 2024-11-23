@@ -19,6 +19,7 @@ export default function LoginForm({ session }: LoginFormProps) {
     await signIn("credentials", {
       email: credentials.email,
       password: credentials.password,
+      redirectTo: "/protected-route",
     });
   };
   useEffect(() => {
