@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { UserCredentials, userLogin } from "./app/actions/auth";
-import { redirect } from "next/navigation";
 
 export const {
   handlers: { GET, POST },
@@ -11,6 +10,10 @@ export const {
 } = NextAuth({
   pages: {
     signIn: "/signin",
+  },
+  session: {
+    strategy: "jwt",
+    maxAge: 10,
   },
   providers: [
     Credentials({
