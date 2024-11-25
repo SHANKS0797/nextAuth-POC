@@ -4,7 +4,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-
+import { FaFacebook } from "react-icons/fa";
 type LoginFormProps = {
   session: Session | null;
 };
@@ -28,6 +28,14 @@ export default function LoginForm({ session }: LoginFormProps) {
   ) => {
     e.preventDefault();
     await signIn("google", {
+      redirectTo: "/userProfile",
+    });
+  };
+  const handleFacebookLoginSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault();
+    await signIn("facebook", {
       redirectTo: "/userProfile",
     });
   };
@@ -83,6 +91,15 @@ export default function LoginForm({ session }: LoginFormProps) {
           >
             <FcGoogle />
             Signin with Google
+          </button>
+          {/* -------------------- SIGN IN WITH FACEBOOK BUTTON -------------------- */}
+          <button
+            type="button"
+            onClick={handleFacebookLoginSubmit}
+            className="flex justify-center items-center w-full py-3 mt-1 border-2 border-[#181818] rounded-full"
+          >
+            <FaFacebook fill="#316FF6" />
+            Signin with Facebook
           </button>
         </fieldset>
       </form>
