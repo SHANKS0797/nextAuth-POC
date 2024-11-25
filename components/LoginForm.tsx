@@ -19,12 +19,12 @@ export default function LoginForm({ session }: LoginFormProps) {
     await signIn("credentials", {
       email: credentials.email,
       password: credentials.password,
-      redirectTo: "/protected-route",
+      redirectTo: "/userProfile",
     });
   };
   useEffect(() => {
     if (session !== null) {
-      router.push("/protected-route");
+      router.push("/userProfile");
     }
   }, [session]);
   if (session === null) {

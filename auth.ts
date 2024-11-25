@@ -2,6 +2,19 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { UserCredentials, userLogin } from "./app/actions/auth";
 
+export interface SessionUserProfile {
+  id: string;
+  name: string;
+  email: string;
+  profileImage: string | null;
+}
+
+declare module "next-auth" {
+  interface Session {
+    user: SessionUserProfile;
+  }
+}
+
 export const {
   handlers: { GET, POST },
   signIn,
@@ -34,9 +47,29 @@ export const {
         return {
           name: user.data.firstName + " " + user.data.lastName,
           email: user.data.emailId,
+          image: user.data.profilePhoto,
           id: user.data.token,
         };
       },
     }),
   ],
+  callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        token = { ...token, ...user };
+      }
+      return token;
+    },
+    session({ session, token }) {
+      const user = token as typeof token & SessionUserProfile;
+      session.user = {
+        ...session.user,
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        profileImage: user.profileImage,
+      };
+      return session;
+    },
+  },
 });

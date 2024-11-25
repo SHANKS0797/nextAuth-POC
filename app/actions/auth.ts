@@ -17,6 +17,53 @@ export type UserCredentials = {
   token: "";
   sessionID: "";
 };
+export type userDetails = {
+  addressId: number;
+  streetAddress1: string;
+  streetAddress2: string;
+  addressType: any;
+  country: number;
+  countryCode: string;
+  countryName: any;
+  zip: string;
+  state: number;
+  statecode: string;
+  city: string;
+  boldUserName: any;
+  tagline: any;
+  customerType: any;
+  metalPreference: string;
+  metalBarsInterest: any;
+  favCoinRoundSeries: any;
+  lastName: string;
+  firstName: string;
+  mobNo: string;
+  emailId: string;
+  profilePhoto: string;
+  stateName: string;
+  isWholeSaler: boolean;
+  isSubscribed: boolean;
+  isActive: boolean;
+  isDefaultAddress: boolean;
+  isCustomerSupport: boolean;
+  shippingName: any;
+  echeckCreditLimit: number;
+  allowSplitOrders: boolean;
+  allowCombineOrder: boolean;
+  accountNumber: any;
+  depositoryName: any;
+  shippingProfile: any;
+  stateType: any;
+  isVerified: boolean;
+};
+export type cartInterface = {
+  productId: number;
+  productName: string;
+  stockSource: string;
+  price: number;
+  quantity: number;
+  image: string;
+};
 export const signUp = async (
   credentials: NewUserCredentials,
   screenSize: string
@@ -44,4 +91,43 @@ export const userLogin = async (credentials: UserCredentials) => {
     credentials
   );
   return result.data;
+};
+
+export const getCustomerDetails = async (
+  token: string
+): Promise<userDetails> => {
+  console.log("Token recieved", token);
+  const res = await axios.get(
+    `${process.env.BASE_URL}/api/Account/GetCustomerDetails`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return res.data.data as userDetails;
+};
+
+export const getCustomerCart = async (
+  token: string
+): Promise<cartInterface[]> => {
+  const response = await axios
+    .get(
+      `${process.env.BASE_URL}/api/ShoppingCart/GetProductFromShoppingCart`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    )
+    .then((res) => {
+      return res.data.data;
+    });
+  const cartProducts: cartInterface[] = response.map((c: any) => {
+    return {
+      productId: c.productId,
+      productName: c.productName,
+      stockSource: c.productInventorySource,
+      price: c.price,
+      quantity: c.quantity,
+      image: c.imagePath,
+    };
+  });
+  return cartProducts;
 };
