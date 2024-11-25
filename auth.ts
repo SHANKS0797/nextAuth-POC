@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import { UserCredentials, userLogin } from "./app/actions/auth";
 
 export interface SessionUserProfile {
@@ -51,6 +52,17 @@ export const {
           id: user.data.token,
         };
       },
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code"
+        }
+      }
     }),
   ],
   callbacks: {

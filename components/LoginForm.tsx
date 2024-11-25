@@ -3,6 +3,7 @@ import { Session } from "next-auth";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
+import { FcGoogle } from "react-icons/fc";
 
 type LoginFormProps = {
   session: Session | null;
@@ -19,6 +20,14 @@ export default function LoginForm({ session }: LoginFormProps) {
     await signIn("credentials", {
       email: credentials.email,
       password: credentials.password,
+      redirectTo: "/userProfile",
+    });
+  };
+  const handleGoogleLoginSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault();
+    await signIn("google", {
       redirectTo: "/userProfile",
     });
   };
@@ -62,9 +71,18 @@ export default function LoginForm({ session }: LoginFormProps) {
               className="w-full border-2 border-[#464646] outline-none focus-within:outline-none focus-within:border-[#97003c] px-2 py-1.5"
             />
           </div>
-          {/* -------------------- SUBMIT BUTTON -------------------- */}
+          {/* -------------------- SUBMIT CREDENTIALS BUTTON -------------------- */}
           <button type="submit" className="w-full py-3">
             <p className="rounded text-white py-3 bg-[#c8003d]">Login</p>
+          </button>
+          {/* -------------------- SIGN IN WITH GOOGLE BUTTON -------------------- */}
+          <button
+            type="button"
+            onClick={handleGoogleLoginSubmit}
+            className="flex justify-center items-center w-full py-3 border-2 border-[#181818] rounded-full"
+          >
+            <FcGoogle />
+            Signin with Google
           </button>
         </fieldset>
       </form>
